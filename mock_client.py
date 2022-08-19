@@ -109,6 +109,11 @@ class MockClient:
             if "noreload" not in self.id:
                 self.update_id(self.id.replace('fail', 'reload'))
 
+        def update_id(self, new_id):
+            self.id = new_id
+            self.short_id = self.id[0:10]
+            self.attrs['ID'] = new_id
+
         def reset_id(self):
             if "noreload" not in self.id:
                 new_id = self.id.replace('reload', 'fail')
