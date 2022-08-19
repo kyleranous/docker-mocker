@@ -104,7 +104,16 @@ class MockClient:
             return True
 
         def reload(self):
-            pass
+            """
+            simulates docker.Client.Node.reload()
+            """
+            self.update_id(self.id.replace('fail', 'reload'))
+
+        def reset_id(self):
+            new_id = self.id.replace('reload', 'fail')
+            self.id = new_id
+            self.short_id = self.id[0:10]
+            self.attrs['ID'] = new_id
 
        
             
