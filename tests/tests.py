@@ -3,7 +3,7 @@ import os
 import json
 from docker.errors import APIError
 
-from .. import MockClient
+from ..mock_client import MockClient
 
 
 class TestMockClient(unittest.TestCase):
