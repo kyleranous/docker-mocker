@@ -1,1 +1,1 @@
-from utils.docker_mocker.mock_client import MockClient
+from mock_client import MockClient
