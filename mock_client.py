@@ -92,7 +92,6 @@ class MockClient:
             self.id = node_dict['ID']
             self.short_id = self.id[0:10]
             self.version = self.attrs["Version"]["Index"]
-
             
         def update(self, node_spec):
             
@@ -107,13 +106,15 @@ class MockClient:
             """
             simulates docker.Client.Node.reload()
             """
-            self.update_id(self.id.replace('fail', 'reload'))
+            if "noreload" not in self.id:
+                self.update_id(self.id.replace('fail', 'reload'))
 
         def reset_id(self):
-            new_id = self.id.replace('reload', 'fail')
-            self.id = new_id
-            self.short_id = self.id[0:10]
-            self.attrs['ID'] = new_id
+            if "noreload" not in self.id:
+                new_id = self.id.replace('reload', 'fail')
+                self.id = new_id
+                self.short_id = self.id[0:10]
+                self.attrs['ID'] = new_id
 
        
             
