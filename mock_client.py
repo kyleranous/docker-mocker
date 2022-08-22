@@ -100,6 +100,9 @@ class MockClient:
                 raise APIError(f"Failed to update node {self.id}")
             
             self.attrs['Spec'] = node_spec
+            if "reload" in self.id:
+                self.reset_id()
+                
             return True
 
         def reload(self):

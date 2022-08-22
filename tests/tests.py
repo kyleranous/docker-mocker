@@ -10,7 +10,7 @@ class TestMockClient(unittest.TestCase):
 
     def test_load_from_file(self):
         """
-            Tests that load_from_file 
+            Tests that load_from_file successfully creates populated MockClient object.
         """
         mock_client = MockClient()
         cwd = os.getcwd()
