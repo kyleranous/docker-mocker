@@ -183,6 +183,98 @@
                     "Reachability": "reachable",
                     "Addr": "10.0.0.44:2337"
                 }
+        },
+        {
+            "ID": "man_fail_noreload",
+            "Version": {
+                "Index": ""
+            },
+            "CreatedAt": "",
+            "UpdatedAt": "",
+            "Spec": {
+                "Availability": "available",
+                "Name": "ManNode3",
+                "Role": "manager",
+                "Labels": {}
+            },
+            "Description": {
+                "Hostname": "man-node-3",
+                "Platform": {
+                    "Architecture": "amd64",
+                    "OS": "linux"
+                },
+                "Resources": {
+                    "NanoCPUs": 4000000000,
+                    "MemoryBytes": 8272408576,
+                    "GenericResources": []
+                },
+                "Engine": {
+                    "EngineVersion": "17.06.0",
+                    "Labels": {},
+                    "Plugins": []
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                }
+            },
+            "Status": {
+                "State": "ready",
+                "Message": "",
+                "Addr": "172.17.0.5"
+            },
+            "ManagerStatus": {
+                "Leader": false,
+                "Reachability": "reachable",
+                "Addr": "10.0.0.45:2337"
+            }
+        },
+        {
+            "ID": "work_fail_noreload",
+            "Version": {
+                "Index": ""
+            },
+            "CreatedAt": "",
+            "UpdatedAt": "",
+            "Spec": {
+                "Availability": "available",
+                "Name": "WorkNode3",
+                "Role": "manager",
+                "Labels": {}
+            },
+            "Description": {
+                "Hostname": "work-node-3",
+                "Platform": {
+                    "Architecture": "amd64",
+                    "OS": "linux"
+                },
+                "Resources": {
+                    "NanoCPUs": 4000000000,
+                    "MemoryBytes": 8272408576,
+                    "GenericResources": []
+                },
+                "Engine": {
+                    "EngineVersion": "17.06.0",
+                    "Labels": {},
+                    "Plugins": []
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                }
+            },
+            "Status": {
+                "State": "ready",
+                "Message": "",
+                "Addr": "172.17.0.6"
+            },
+            "ManagerStatus": {
+                "Leader": false,
+                "Reachability": "reachable",
+                "Addr": "10.0.0.46:2337"
+            }
         }
     ],
     "swarm": {}
