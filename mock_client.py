@@ -13,6 +13,7 @@ class MockClient:
     """
     def __init__(self):
         self.nodes = MockClient.TestNodes()
+        
 
     def load_from_file(self, file_name):
         """
@@ -24,6 +25,9 @@ class MockClient:
             # Create Nodes
             for node in client_dict.get('nodes'):
                 self.nodes.add_node(node)
+            
+            for swarm in client_dict.get('swarms'):
+                self.swarm = self.Swarm(swarm)
             
             return True
         
@@ -102,7 +106,7 @@ class MockClient:
             self.attrs['Spec'] = node_spec
             if "reload" in self.id:
                 self.reset_id()
-                
+
             return True
 
         def reload(self):
@@ -124,7 +128,32 @@ class MockClient:
                 self.short_id = self.id[0:10]
                 self.attrs['ID'] = new_id
 
-       
+    
+    class Swarm:
+
+        def __init__(self, swarm_dict=None):
+            self.attrs = swarm_dict
+
+        def init(self):
+            pass
+
+        def get_unlock_key(self):
+            pass
+
+        def join(self, remote_addrs, join_token, listen_addr, advertise_addr, data_path_addr):
+            pass
+
+        def leave(self, force=False):
+            pass
+
+        def unlock(self, key):
+            pass
+
+        def update(self):
+            pass
+
+        def reload(self):
+            pass
             
     
 
