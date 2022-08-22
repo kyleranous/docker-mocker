@@ -99,3 +99,17 @@ class TestMockNodes(unittest.TestCase):
 
         self.assertEquals(len(worker_nodes), len(json_work_ids))
         self.assertEquals(len(man_nodes), len(json_man_ids))
+
+
+class TestMockSwarm(unittest.TestCase):
+
+    def setUp(self):
+        self.cwd = os.getcwd()
+        self.client = MockClient()
+        self.client.load_from_file(os.path.join(os.path.dirname(__file__), 'mockClient.json'))
+        f = open(os.path.join(os.path.dirname(__file__), 'mockClient.json'))
+        self.client_dict = json.load(f)
+
+    def test_get_swarm_attrs(self):
+
+        self.assert_equals(self.client.swarm.attrs, self.client_dict['swarm'][0])
