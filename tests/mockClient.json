@@ -277,5 +277,37 @@
             }
         }
     ],
-    "swarm": {}
+    "swarms": [
+        {
+            "ID": "test_swarm",
+            "Version": {
+                "Index": 373531
+            },
+            "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+            "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+            "Spec": {
+                "Name": "Swarm_Name",
+                "Labels": {},
+                "Orchestration": {},
+                "Raft": {},
+                "Dispatcher": {},
+                "CAConfig": {},
+                "EncryptionConfig": {},
+                "TaskDefaults": {}
+            },
+            "TLSInfo": {
+                "TrustRoot": "",
+                "CertIssuerSubject": "",
+                "CertIssuerPublicKey": ""
+            },
+            "RootRotationInProgress": false,
+            "DataPathPort": 4789,
+            "DefaultAddrPool": [],
+            "SubnetSize": 24,
+            "JoinTokens": {
+                "Worker": "worker_join_token_001",
+                "Manager": "manager_join_token_001"
+            }
+        }
+    ]
 }
