@@ -112,4 +112,4 @@ class TestMockSwarm(unittest.TestCase):
 
     def test_get_swarm_attrs(self):
 
-        self.assertEquals(self.client.swarm.attrs, self.client_dict['swarm'][0])
+        self.assertEquals(self.client.swarm.attrs, self.client_dict['swarms'][0])
