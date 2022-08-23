@@ -1,7 +1,43 @@
 {
+    "swarms": [
+        {
+            "ID": "test_swarm",
+            "Version": {
+                "Index": 373531
+            },
+            "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+            "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+            "Spec": {
+                "Name": "Swarm_Name",
+                "Labels": {},
+                "Orchestration": {},
+                "Raft": {},
+                "Dispatcher": {},
+                "CAConfig": {},
+                "EncryptionConfig": {},
+                "TaskDefaults": {}
+            },
+            "TLSInfo": {
+                "TrustRoot": "",
+                "CertIssuerSubject": "",
+                "CertIssuerPublicKey": ""
+            },
+            "RootRotationInProgress": false,
+            "DataPathPort": 4789,
+            "DefaultAddrPool": [],
+            "SubnetSize": 24,
+            "JoinTokens": {
+                "Worker": "worker_join_token_001",
+                "Manager": "manager_join_token_001"
+            }
+        }
+    ],
     "nodes": [
         {
-            "ID": "man_fail_node",
+            "state": "succeed",
+            "swarm_id": "test_swarm",
+            "attrs": {
+                "ID": "man_node_1",
                 "Version": {
                     "Index": ""
                 },
@@ -45,269 +81,7 @@
                     "Reachability": "reachable",
                     "Addr": "10.0.0.41:2337"
                 }
-        },
-        {
-            "ID": "man_succeed_node",
-                "Version": {
-                    "Index": ""
-                },
-                "CreatedAt": "",
-                "UpdatedAt": "",
-                "Spec": {
-                    "Availability": "available",
-                    "Name": "ManNode2",
-                    "Role": "manager",
-                    "Labels": {}
-                },
-                "Description": {
-                    "Hostname": "man-node-2",
-                    "Platform": {
-                        "Architecture": "amd64",
-                        "OS": "linux"
-                    },
-                    "Resources": {
-                        "NanoCPUs": 4000000000,
-                        "MemoryBytes": 8272408576,
-                        "GenericResources": []
-                    },
-                    "Engine": {
-                        "EngineVersion": "17.06.0",
-                        "Labels": {},
-                        "Plugins": []
-                    },
-                    "TLSInfo": {
-                        "TrustRoot": "",
-                        "CertIssuerSubject": "",
-                        "CertIssuerPublicKey": ""
-                    }
-                },
-                "Status": {
-                    "State": "ready",
-                    "Message": "",
-                    "Addr": "172.17.0.2"
-                },
-                "ManagerStatus": {
-                    "Leader": true,
-                    "Reachability": "reachable",
-                    "Addr": "10.0.0.42:2337"
-                }
-        },
-        {
-            "ID": "work_fail_node",
-                "Version": {
-                    "Index": ""
-                },
-                "CreatedAt": "",
-                "UpdatedAt": "",
-                "Spec": {
-                    "Availability": "available",
-                    "Name": "WorkNode1",
-                    "Role": "worker",
-                    "Labels": {}
-                },
-                "Description": {
-                    "Hostname": "work-node-1",
-                    "Platform": {
-                        "Architecture": "amd64",
-                        "OS": "linux"
-                    },
-                    "Resources": {
-                        "NanoCPUs": 4000000000,
-                        "MemoryBytes": 8272408576,
-                        "GenericResources": []
-                    },
-                    "Engine": {
-                        "EngineVersion": "17.06.0",
-                        "Labels": {},
-                        "Plugins": []
-                    },
-                    "TLSInfo": {
-                        "TrustRoot": "",
-                        "CertIssuerSubject": "",
-                        "CertIssuerPublicKey": ""
-                    }
-                },
-                "Status": {
-                    "State": "ready",
-                    "Message": "",
-                    "Addr": "172.17.0.3"
-                },
-                "ManagerStatus": {
-                    "Leader": false,
-                    "Reachability": "reachable",
-                    "Addr": "10.0.0.43:2337"
-                }
-        },
-        {
-            "ID": "work_succeed_node",
-                "Version": {
-                    "Index": ""
-                },
-                "CreatedAt": "",
-                "UpdatedAt": "",
-                "Spec": {
-                    "Availability": "available",
-                    "Name": "WorkNode2",
-                    "Role": "worker",
-                    "Labels": {}
-                },
-                "Description": {
-                    "Hostname": "work-node-2",
-                    "Platform": {
-                        "Architecture": "amd64",
-                        "OS": "linux"
-                    },
-                    "Resources": {
-                        "NanoCPUs": 4000000000,
-                        "MemoryBytes": 8272408576,
-                        "GenericResources": []
-                    },
-                    "Engine": {
-                        "EngineVersion": "17.06.0",
-                        "Labels": {},
-                        "Plugins": []
-                    },
-                    "TLSInfo": {
-                        "TrustRoot": "",
-                        "CertIssuerSubject": "",
-                        "CertIssuerPublicKey": ""
-                    }
-                },
-                "Status": {
-                    "State": "ready",
-                    "Message": "",
-                    "Addr": "172.17.0.4"
-                },
-                "ManagerStatus": {
-                    "Leader": false,
-                    "Reachability": "reachable",
-                    "Addr": "10.0.0.44:2337"
-                }
-        },
-        {
-            "ID": "man_fail_noreload",
-            "Version": {
-                "Index": ""
-            },
-            "CreatedAt": "",
-            "UpdatedAt": "",
-            "Spec": {
-                "Availability": "available",
-                "Name": "ManNode3",
-                "Role": "manager",
-                "Labels": {}
-            },
-            "Description": {
-                "Hostname": "man-node-3",
-                "Platform": {
-                    "Architecture": "amd64",
-                    "OS": "linux"
-                },
-                "Resources": {
-                    "NanoCPUs": 4000000000,
-                    "MemoryBytes": 8272408576,
-                    "GenericResources": []
-                },
-                "Engine": {
-                    "EngineVersion": "17.06.0",
-                    "Labels": {},
-                    "Plugins": []
-                },
-                "TLSInfo": {
-                    "TrustRoot": "",
-                    "CertIssuerSubject": "",
-                    "CertIssuerPublicKey": ""
-                }
-            },
-            "Status": {
-                "State": "ready",
-                "Message": "",
-                "Addr": "172.17.0.5"
-            },
-            "ManagerStatus": {
-                "Leader": false,
-                "Reachability": "reachable",
-                "Addr": "10.0.0.45:2337"
             }
-        },
-        {
-            "ID": "work_fail_noreload",
-            "Version": {
-                "Index": ""
-            },
-            "CreatedAt": "",
-            "UpdatedAt": "",
-            "Spec": {
-                "Availability": "available",
-                "Name": "WorkNode3",
-                "Role": "manager",
-                "Labels": {}
-            },
-            "Description": {
-                "Hostname": "work-node-3",
-                "Platform": {
-                    "Architecture": "amd64",
-                    "OS": "linux"
-                },
-                "Resources": {
-                    "NanoCPUs": 4000000000,
-                    "MemoryBytes": 8272408576,
-                    "GenericResources": []
-                },
-                "Engine": {
-                    "EngineVersion": "17.06.0",
-                    "Labels": {},
-                    "Plugins": []
-                },
-                "TLSInfo": {
-                    "TrustRoot": "",
-                    "CertIssuerSubject": "",
-                    "CertIssuerPublicKey": ""
-                }
-            },
-            "Status": {
-                "State": "ready",
-                "Message": "",
-                "Addr": "172.17.0.6"
-            },
-            "ManagerStatus": {
-                "Leader": false,
-                "Reachability": "reachable",
-                "Addr": "10.0.0.46:2337"
-            }
-        }
-    ],
-    "swarms": [
-        {
-            "ID": "test_swarm",
-            "Version": {
-                "Index": 373531
-            },
-            "CreatedAt": "2016-08-18T10:44:24.496525531Z",
-            "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
-            "Spec": {
-                "Name": "Swarm_Name",
-                "Labels": {},
-                "Orchestration": {},
-                "Raft": {},
-                "Dispatcher": {},
-                "CAConfig": {},
-                "EncryptionConfig": {},
-                "TaskDefaults": {}
-            },
-            "TLSInfo": {
-                "TrustRoot": "",
-                "CertIssuerSubject": "",
-                "CertIssuerPublicKey": ""
-            },
-            "RootRotationInProgress": false,
-            "DataPathPort": 4789,
-            "DefaultAddrPool": [],
-            "SubnetSize": 24,
-            "JoinTokens": {
-                "Worker": "worker_join_token_001",
-                "Manager": "manager_join_token_001"
-            }
-        }
+        }  
     ]
 }
