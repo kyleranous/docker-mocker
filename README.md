@@ -31,7 +31,7 @@ Complete - :heavy_check_mark:
 | Secrets | :red_circle: Not Started |
 | Services | :red_circle: Not Started |
 | Swarm | :red_circle: Not Started |
-| Volumes | Not Started |
+| Volumes | :red_circle: Not Started |
 
 ## Usage
 
