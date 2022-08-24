@@ -1,58 +1,26 @@
 {
-    "swarms": [
-        {
-            "ID": "test_swarm",
-            "Version": {
-                "Index": 373531
-            },
-            "CreatedAt": "2016-08-18T10:44:24.496525531Z",
-            "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
-            "Spec": {
-                "Name": "Swarm_Name",
-                "Labels": {},
-                "Orchestration": {},
-                "Raft": {},
-                "Dispatcher": {},
-                "CAConfig": {},
-                "EncryptionConfig": {},
-                "TaskDefaults": {}
-            },
-            "TLSInfo": {
-                "TrustRoot": "",
-                "CertIssuerSubject": "",
-                "CertIssuerPublicKey": ""
-            },
-            "RootRotationInProgress": false,
-            "DataPathPort": 4789,
-            "DefaultAddrPool": [],
-            "SubnetSize": 24,
-            "JoinTokens": {
-                "Worker": "worker_join_token_001",
-                "Manager": "manager_join_token_001"
-            }
-        }
-    ],
+    "swarms": [],
     "nodes": [
         {
-            "state": "succeed",
-            "swarm_id": "test_swarm",
+            "swarm": null,
+            "state": "success",
             "attrs": {
-                "ID": "man_node_1",
+                "ID": "no_swarm_node",
                 "Version": {
-                    "Index": ""
+                    "Index": 373531
                 },
                 "CreatedAt": "",
                 "UpdatedAt": "",
                 "Spec": {
-                    "Availability": "available",
-                    "Name": "ManNode1",
+                    "Availability": "active",
+                    "Name": "no-swarm-node",
                     "Role": "manager",
                     "Labels": {}
                 },
                 "Description": {
-                    "Hostname": "man-node-1",
+                    "Hostname": "no-swarm-node",
                     "Platform": {
-                        "Architecture": "amd64",
+                        "Architecture": "x86_64",
                         "OS": "linux"
                     },
                     "Resources": {
@@ -77,11 +45,61 @@
                     "Addr": "172.17.0.1"
                 },
                 "ManagerStatus": {
-                    "Leader": false,
+                    "Leader": true,
                     "Reachability": "reachable",
-                    "Addr": "10.0.0.41:2337"
+                    "Addr": "10.0.0.20:2377"
                 }
             }
-        }  
+        },
+        {
+            "swarm": "swarm_1",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_1_1",
+                "Version": {
+                    "Index": 373531
+                },
+                "CreatedAt": "",
+                "UpdatedAt": "",
+                "Spec": {
+                    "Availability": "active",
+                    "Name": "test-node-1-1",
+                    "Role": "manager",
+                    "Labels": {}
+                },
+                "Description": {
+                    "Hostname": "test-node-1-1",
+                    "Platform": {
+                        "Architecture": "x86_64",
+                        "OS": "linux"
+                    },
+                    "Resources": {
+                        "NanoCPUs": 4000000000,
+                        "MemoryBytes": 8272408576,
+                        "GenericResources": []
+                    },
+                    "Engine": {
+                        "EngineVersion": "17.06.0",
+                        "Labels": {},
+                        "Plugins": []
+                    },
+                    "TLSInfo": {
+                        "TrustRoot": "",
+                        "CertIssuerSubject": "",
+                        "CertIssuerPublicKey": ""
+                    }
+                },
+                "Status": {
+                    "State": "ready",
+                    "Message": "",
+                    "Addr": "172.17.0.2"
+                },
+                "ManagerStatus": {
+                    "Leader": true,
+                    "Reachability": "reachable",
+                    "Addr": "10.0.0.20:2377"
+                }
+            }
+        }
     ]
 }
