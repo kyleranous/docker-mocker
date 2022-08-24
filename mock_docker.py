@@ -2,8 +2,6 @@
 mock_docker is a temporary db to mock the Docker API in unit tests.
 """
 
-import sqlite3
-import json
 import docker
 
 
@@ -82,11 +80,41 @@ class MockDocker:
 
         def __init__(self, node_dict, mock_docker):
             self.attrs = node_dict['attrs']
+            self.id = node_dict['attrs']['ID']
+            self.short_id = node_dict['attrs']['ID'][:10]
+            self.version = node_dict['attrs']['Version']['Index']
             self._swarm = node_dict['swarm']
             self._state = node_dict['state']
             self.mock_docker = mock_docker
 
+        def reload(self):
+            """
+            Simulates docker.Node.reload() by adjusting the state of the node
+            """
+            if self._state == 'fail':
+                self._state = 'reload'
 
-        
-            
+        def update(self, node_spec):
+            """
+            Simulates the update function by adjusting the node entry in MockDocker
+            """
+            # Check to see if node is in a fail state
+            if self._state == 'fail':
+                raise docker.errors.APIError("Failed to update node")
+
+            # Update the node Spec
+            self.attrs['Spec']['Availability'] = node_spec.get('Availability')
+            self.attrs['Spec']['Role'] = node_spec.get('Role')
+            self.attrs['Spec']['Labels'] = node_spec.get('Labels')
+            self.attrs['Spec']['Name'] = node_spec.get('Name')
+
+            # Update the nodes library in MockDocker
+            for node in self.mock_docker._client_dict['nodes']:
+                if node['attrs']['ID'] == self.id:
+                    node['attrs']['Spec'] = self.attrs['Spec']
+
+            if self._state == 'reload':
+                self._state = 'fail'
+
+            return True
             
