@@ -178,3 +178,121 @@ class TestnodesClass(unittest.TestCase):
                 filtered_node_list.append(node)
 
         self.assertEqual(len(client.nodes.list(filters={'name': name})), len(filtered_node_list))
+
+    def test_list_nodes_in_swarm_with_filter_by_role(self):
+        """
+        Test List Nodes in Swarm filtered by role
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+        
+        role = node_dict['attrs']['Spec']['Role']
+        filtered_node_list = []
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == node_dict['swarm'] and role in node['attrs']['Spec']['Role']:
+                filtered_node_list.append(node)
+
+        self.assertEqual(len(client.nodes.list(filters={'role': role})), len(filtered_node_list))
+
+
+class TestNodeClass(unittest.TestCase):
+    """
+    Tests for MockDocker.Node class
+    """
+    def setUp(self):
+        f = open(os.path.join(os.path.dirname(__file__), 'mockClient.json'), 'r')
+        self.client_dict = json.load(f)
+        self.mock_client = MockDocker(client_dict=self.client_dict)
+        f.close()
+
+    def test_node_update(self):
+        """
+        Test the update function will update a node appropriatly
+        """
+
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            # Find the first node that meets test requirements
+            if node['swarm'] is not None and node['state'] == 'success':
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes in swarm found with success state")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+        node = client.nodes.get(node_dict['attrs']['ID'])
+
+        new_node_spec = {
+            'Availability': 'pause',
+            'Role': 'worker',
+            'Name': 'asdfl;kjasrftg',
+            'Labels': {}
+        }
+        node.update(new_node_spec)
+        self.assertEqual(client._active_server['attrs']['Spec'], new_node_spec)
+
+    def test_node_update_fail(self):
+        """
+        Test that Node.update() fails when passed a node in a fail state
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            # Find the first node that meets test requirements
+            if node['swarm'] is not None and node['state'] == 'fail':
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes in swarm found with fail state")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+        node = client.nodes.get(node_dict['attrs']['ID'])
+
+        new_node_spec = {
+            'Availability': 'pause',
+            'Role': 'worker',
+            'Name': 'asdfl;kjasrftg',
+            'Labels': {}
+        }
+        with self.assertRaises(APIError):
+            node.update(new_node_spec)
+
+    def test_node_reload(self):
+        """
+        Test that reload will adjust the state and allow an update to pass
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            # Find the first node that meets test requirements
+            if node['swarm'] is not None and node['state'] == 'fail':
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes in swarm found with fail state")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+        node = client.nodes.get(node_dict['attrs']['ID'])
+
+        new_node_spec = {
+            'Availability': 'pause',
+            'Role': 'worker',
+            'Name': 'asdfl;kjasrftg',
+            'Labels': {}
+        }
+        with self.assertRaises(APIError):
+            node.update(new_node_spec)
+
+        node.reload()
+        node.update(new_node_spec)
+        self.assertEqual(client._active_server['attrs']['Spec'], new_node_spec)
+        self.assertEqual(client._active_server['state'], 'fail')
