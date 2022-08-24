@@ -100,6 +100,56 @@
                     "Addr": "10.0.0.20:2377"
                 }
             }
+        },
+        {
+            "swarm": "swarm_1",
+            "state": "fail",
+            "attrs": {
+                "ID": "test_node_1_2",
+                "Version": {
+                    "Index": 373531
+                },
+                "CreatedAt": "",
+                "UpdatedAt": "",
+                "Spec": {
+                    "Availability": "active",
+                    "Name": "test-node-1-2",
+                    "Role": "worker",
+                    "Labels": {}
+                },
+                "Description": {
+                    "Hostname": "test-node-1-2",
+                    "Platform": {
+                        "Architecture": "x86_64",
+                        "OS": "linux"
+                    },
+                    "Resources": {
+                        "NanoCPUs": 4000000000,
+                        "MemoryBytes": 8272408576,
+                        "GenericResources": []
+                    },
+                    "Engine": {
+                        "EngineVersion": "17.06.0",
+                        "Labels": {},
+                        "Plugins": []
+                    },
+                    "TLSInfo": {
+                        "TrustRoot": "",
+                        "CertIssuerSubject": "",
+                        "CertIssuerPublicKey": ""
+                    }
+                },
+                "Status": {
+                    "State": "ready",
+                    "Message": "",
+                    "Addr": "172.17.0.3"
+                },
+                "ManagerStatus": {
+                    "Leader": true,
+                    "Reachability": "reachable",
+                    "Addr": "10.0.0.20:2377"
+                }
+            }
         }
     ]
 }
