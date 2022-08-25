@@ -5,7 +5,6 @@ mock_docker is a temporary db to mock the Docker API in unit tests.
 import docker
 
 
-
 class MockDocker:
 
     def __init__(self, client_dict={}):

@@ -26,7 +26,7 @@ Complete - :heavy_check_mark:
 | Containers | :red_circle: Not Started |
 | Images | :red_circle: Not Started |
 | Networks | :red_circle: Not Started |
-| Nodes | :large_blue_diamond: Testing |
+| Nodes | :heavy_check_mark: Complete |
 | Plugins | :red_circle: Not Started |
 | Secrets | :red_circle: Not Started |
 | Services | :red_circle: Not Started |
