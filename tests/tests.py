@@ -296,3 +296,241 @@ class TestNodeClass(unittest.TestCase):
         node.update(new_node_spec)
         self.assertEqual(client._active_server['attrs']['Spec'], new_node_spec)
         self.assertEqual(client._active_server['state'], 'fail')
+
+
+class TestSwarmClass(unittest.TestCase):
+    """
+    Tests to verify functionality of the MockDocker.Swarm class
+    """
+    def setUp(self):
+        f = open(os.path.join(os.path.dirname(__file__), 'mockClient.json'), 'r')
+        self.client_dict = json.load(f)
+        self.mock_client = MockDocker(client_dict=self.client_dict)
+        f.close()
+
+    def test_swarm_init(self):
+        """
+        Test that when a connection is made swarm is generated and populated with expected data
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes in swarm found")
+        swarm_dict = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['id'] == node_dict['swarm']:
+                swarm_dict = swarm
+                break
+        if not swarm_dict:
+            raise Exception("No Swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+        
+        self.assertIsNotNone(client.swarm.attrs)
+        self.assertEqual(client.swarm.attrs, swarm_dict['attrs'])
+
+    def test_get_unlock_key(self):
+        """
+        Test that UnlockKey is returned in a dictionary
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes in swarm found")
+        swarm_dict = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['id'] == node_dict['swarm']:
+                swarm_dict = swarm
+                break
+        if not swarm_dict:
+            raise Exception("No Swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+        
+        self.assertEqual(client.swarm.get_unlock_key().get('UnlockKey'), swarm_dict.get('UnlockKey'))
+
+    def test_join_fails_if_node_in_swarm(self):
+        """
+        Test that join will fill if the node is already a member of a swarm
+        """
+
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes in swarm found")
+        
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        with self.assertRaises(APIError):
+            client.swarm.join(remote_addrs=[node_dict['attrs']['Status']['Addr']], join_token='asdfasfasf')
+
+    def test_join_fails_with_no_join_token(self):
+        """
+        Test that Join will Fail if no join token is passed or incorrect join token is passed
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes not in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        # Test with no join token passed
+        with self.assertRaises(APIError):
+            client.swarm.join(remote_addrs=[node_dict['attrs']['Status']['Addr']])
+
+    def test_join_fails_with_wrong_token(self):
+        """
+        Test that Join will Fail if no join token is passed or incorrect join token is passed
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes not in swarm found")
+
+        swarm_node = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                swarm_node = node
+                break
+        if not swarm_node:
+            raise Exception("No Nodes in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        # Test with incorrect join token passed
+        with self.assertRaises(APIError):
+            client.swarm.join(remote_addrs=[swarm_node['attrs']['Status']['Addr']], join_token='[]/;.;l')
+
+    def test_join_invalid_addrs(self):
+        """
+        Test that Join will Fail if no join token is passed or incorrect join token is passed
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes not in swarm found")
+
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        # Test with incorrect join token passed
+        with self.assertRaises(APIError):
+            client.swarm.join(remote_addrs=['no_address_here'], join_token="fake_join_token")
+
+    def test_join_swarm_with_worker_token(self):
+        """
+        Test that join will successfully join a swarm
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes not in swarm found")
+
+        swarm_node = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                swarm_node = node
+                break
+        if not swarm_node:
+            raise Exception("No Nodes in swarm found")
+
+        # Get the swarm token
+        for swarm in self.client_dict['swarms']:
+            if swarm['id'] == swarm_node['swarm']:
+                swarm_token = swarm['attrs']['JoinTokens']['Worker']
+                break
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        self.assertTrue(client.swarm.join(remote_addrs=[swarm_node['attrs']['Status']['Addr']], join_token=swarm_token))
+        self.assertEqual(client.nodes.get(node_dict['attrs']['ID']).attrs['Spec']['Role'], 'worker')
+        self.assertEqual(client._active_server['swarm'], swarm['id'])
+
+    def test_join_swarm_with_manager_token(self):
+        """
+        Test that join will successfully join a swarm
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No Nodes not in swarm found")
+
+        swarm_node = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                swarm_node = node
+                break
+        if not swarm_node:
+            raise Exception("No Nodes in swarm found")
+
+        # Get the swarm token
+        for swarm in self.client_dict['swarms']:
+            if swarm['id'] == swarm_node['swarm']:
+                swarm_token = swarm['attrs']['JoinTokens']['Manager']
+                break
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        self.assertTrue(client.swarm.join(remote_addrs=[swarm_node['attrs']['Status']['Addr']], join_token=swarm_token))
+        self.assertEqual(client.nodes.get(node_dict['attrs']['ID']).attrs['Spec']['Role'], 'manager')
+        self.assertEqual(client._active_server['swarm'], swarm['id'])
+
+    def test_reload_swarm(self):
+        """
+        Test that reload will change the swarm state from fail to reload
+        """
+        # Find a swarm set to fail
+        fail_swarm = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'fail':
+                fail_swarm = swarm
+                break
+        if not fail_swarm:
+            raise Exception("No swarm in fail state found")
+
+        # Find a node in the swarm
+        swarm_id = fail_swarm['id']
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == swarm_id:
+                node_dict = node
+                break
+        
+        if not node_dict:
+            raise Exception("No node in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        self.assertTrue(client.swarm.reload())
+        self.assertEqual(client.swarm._state, "reload")
