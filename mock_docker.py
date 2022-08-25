@@ -24,7 +24,10 @@ class MockDocker:
         ip_address = base_url.split(":")[1].strip("/")
         for node in self._client_dict['nodes']:
             if node['attrs']['Status']['Addr'] == ip_address:
+                # Set Active Server
                 self._active_server = node
+                # Load Swarm based on Active Server
+                self.swarm = MockDocker.Swarm(self)
                 return self
 
     class Nodes:
@@ -117,4 +120,89 @@ class MockDocker:
                 self._state = 'fail'
 
             return True
+
+
+    class Swarm:
+
+        def __init__(self, mock_docker):
+            self.mock_docker = mock_docker
+            # Find which Swarm this node belongs to
+            swarm_id = mock_docker._active_server['swarm']
+            self.attrs = None
+            for swarm in mock_docker._client_dict['swarms']:
+                if swarm['id'] == swarm_id:
+                    self.attrs = swarm.get('attrs')
+                    self.version = self.attrs.get('Version').get('Index')
+                    self._state = swarm.get('state')
+                    self._unlock_key = swarm.get('UnlockKey')
+                    break
             
+
+        def get_unlock_key(self):
+            """
+            Simulates the get_unlock_key function by returning a dictionary with "UnlockKey"
+            """
+            key_dict = {
+                "UnlockKey": self._unlock_key
+            }
+            return key_dict
+
+        def init(self, **kwargs):
+            pass
+
+        def join(self, **kwargs):
+            remote_addrs = kwargs.get('remote_addrs')
+            join_token = kwargs.get('join_token')
+            listen_addr = kwargs.get('listen_addr', '0.0.0.0:2377')
+            advertise_addr = kwargs.get('advertise_addr', None)
+            data_path_addr = kwargs.get('data_path_addr', advertise_addr)
+
+            # Check if client is already a member of a swarm
+            if self.mock_docker._active_server['swarm'] is not None or join_token is None:
+                raise docker.errors.APIError("Client is already a member of a swarm")
+
+            # find swarm that is being joined
+            swarm_id = None
+            for node in self.mock_docker._client_dict['nodes']:
+                if node['attrs']['Status']['Addr'] in remote_addrs:
+                    if node['swarm'] is not None:
+                        swarm_id = node['swarm']
+                        break
+            if swarm_id is None:
+                raise docker.errors.APIError("Swarm not found")
+
+            join_swarm = None
+            for swarm in self.mock_docker._client_dict['swarms']:
+                if swarm['id'] == swarm_id:
+                    join_swarm = swarm
+                    break
+            if join_swarm is None:
+                raise docker.errors.APIError("Swarm not found")
+
+            if join_token == join_swarm['attrs']['JoinTokens']['Manager']:
+                self.mock_docker._active_server['swarm'] = swarm_id
+                self.mock_docker._active_server['attrs']['Spec']['Role'] = 'manager'
+                return True
+            
+            if join_token == join_swarm['attrs']['JoinTokens']['Worker']:
+                self.mock_docker._active_server['swarm'] = swarm_id
+                self.mock_docker._active_server['attrs']['Spec']['Role'] = 'worker'
+                return True
+
+            raise docker.errors.APIError("Join token is invalid")
+            
+
+        def leave(self, force=False):
+            pass
+
+        def unlock(self):
+            pass
+
+        def update(self, **kwargs):
+            pass
+
+        def reload(self):
+            if self._state == 'fail':
+                self._state = 'reload'
+            return True
+
