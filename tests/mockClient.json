@@ -1,5 +1,78 @@
 {
-    "swarms": [],
+    "swarms": [
+        {
+            "id": "swarm_1",
+            "state": "unlocked",
+            "UnlockKey": "swarm_1_unlock_key",
+            "attrs": {
+                "ID": "swarm_1",
+                "Version": {
+                    "Index": 373531
+                },
+                "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+                "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+                "Spec": {
+                    "Name": "Swarm 1",
+                    "Labels": {},
+                    "Orchestration": {
+                    "TaskHistoryRetentionLimit": 10
+                    },
+                    "Raft": {
+                        "SnapshotInterval": 10000,
+                        "KeepOldSnapshots": 0,
+                        "LogEntriesForSlowFollowers": 500,
+                        "ElectionTick": 3,
+                        "HeartbeatTick": 1
+                    },
+                    "Dispatcher": {
+                        "HeartbeatPeriod": 5000000000
+                    },
+                    "CAConfig": {
+                        "NodeCertExpiry": 7776000000000000,
+                        "ExternalCAs": [
+                            {
+                                "Protocol": "",
+                                "URL": "",
+                                "Options": {
+                                    "property1": "",
+                                    "property2": ""
+                                },
+                                "CACert": "string"
+                            }
+                        ],
+                        "SigningCACert": "",
+                        "SigningCAKey": "",
+                        "ForceRotate": 0
+                    },
+                    "EncryptionConfig": {
+                        "AutoLockManagers": false
+                    },
+                    "TaskDefaults": {
+                        "LogDriver": {
+                            "Name": "json-file",
+                            "Options": {
+                                "max-file": "10",
+                                "max-size": "100m"
+                            }
+                        }
+                    }
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                },
+                "RootRotationInProgress": false,
+                "DataPathPort": 4789,
+                "DefaultAddrPool": [],
+                "SubnetSize": 24,
+                "JoinTokens": {
+                    "Worker": "swarm_1_worker_token",
+                    "Manager": "swarm_1_manager_token"
+                }
+            }
+        }
+    ],
     "nodes": [
         {
             "swarm": null,
