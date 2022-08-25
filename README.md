@@ -30,7 +30,7 @@ Complete - :heavy_check_mark:
 | Plugins | :red_circle: Not Started |
 | Secrets | :red_circle: Not Started |
 | Services | :red_circle: Not Started |
-| Swarm | :red_circle: Not Started |
+| Swarm | :large_orange_diamond: Development In-Progress |
 | Volumes | :red_circle: Not Started |
 
 ## Usage
