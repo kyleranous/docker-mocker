@@ -1,6 +1,8 @@
 import unittest
 import os
 import json
+import copy
+
 from docker.errors import APIError
 
 from mock_docker import MockDocker
@@ -305,7 +307,7 @@ class TestSwarmClass(unittest.TestCase):
     def setUp(self):
         f = open(os.path.join(os.path.dirname(__file__), 'mockClient.json'), 'r')
         self.client_dict = json.load(f)
-        self.mock_client = MockDocker(client_dict=self.client_dict)
+        self.mock_client = MockDocker(client_dict=dict(self.client_dict))
         f.close()
 
     def test_swarm_init(self):
@@ -534,3 +536,154 @@ class TestSwarmClass(unittest.TestCase):
 
         self.assertTrue(client.swarm.reload())
         self.assertEqual(client.swarm._state, "reload")
+
+    def test_update_on_fail_swarm(self):
+        """
+        Test that Swarm.update() will raise API Error on a swarm set to fail
+        """
+        # Find a swarm set to fail
+        fail_swarm = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'fail':
+                fail_swarm = swarm
+                break
+        if not fail_swarm:
+            raise Exception("No swarm in fail state found")
+
+        # Find a node in the swarm
+        swarm_id = fail_swarm['id']
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == swarm_id:
+                node_dict = node
+                break
+        
+        if not node_dict:
+            raise Exception("No node in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        with self.assertRaises(APIError):
+            client.swarm.update()
+
+    def test_update_swarm_without_token_rotation(self):
+        """
+        Test that Swarm.update() will update the appropriate fields in _attrs
+        """
+        update_dict = {
+            "default_addr_pool": ['1.1.1.1', '1.1.1.2'],
+            "subnet_size": 18,
+            "data_path_addr": 1000,
+            "task_history_retention_limit": 420,
+            "snapshot_interval": 69,
+            "keep_old_snapshots": 3,
+            "log_entries_for_slow_followers": 1,
+            "heartbeat_tick": 23,
+            "election_tick": 22,
+            "dispatcher_heartbeat_period": 50,
+            "node_cert_expiry": 77777,
+            "external_ca": {},
+            "name": "this_has_been_updated",
+            "labels": {
+                "test_label": "Test Label"
+            },
+            "signing_ca_cert": "abc123",
+            "signing_ca_key": "123abc",
+            "ca_force_rotate": 123,
+            "autolock_managers": False,
+            "log_driver": {
+                "test": "test"
+            },
+            "rotate_worker_token": False,
+            "rotate_manager_token": False,
+            "rotate_manager_unlock_key": False,
+        }
+
+        # Find a swarm that is in a success state
+        success_swarm = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'success':
+                success_swarm = swarm
+                break
+        if not success_swarm:
+            raise Exception("No swarm in success state found")
+
+        # Find a node in the swarm
+        swarm_id = success_swarm['id']
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == swarm_id:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No node in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        client.swarm.update(**update_dict)
+
+        self.assertEqual(update_dict['default_addr_pool'], client.swarm.attrs['DefaultAddrPool'])
+        self.assertEqual(update_dict['subnet_size'], client.swarm.attrs['SubnetSize'])
+        # data_path_addr - Not Sure of Mapping
+        # self.assertEqual(update_dict['data_path_addr'], client.swarm.attrs['DataPathAddr'])
+        self.assertEqual(update_dict['task_history_retention_limit'], client.swarm.attrs['Spec']['TaskHistoryRetentionLimit'])
+        self.assertEqual(update_dict['snapshot_interval'], client.swarm.attrs['Spec']['Raft']['SnapshotInterval'])
+        self.assertEqual(update_dict['keep_old_snapshots'], client.swarm.attrs['Spec']['Raft']['KeepOldSnapshots'])
+        self.assertEqual(update_dict['log_entries_for_slow_followers'], client.swarm.attrs['Spec']['Raft']['LogEntriesForSlowFollowers'])
+        self.assertEqual(update_dict['heartbeat_tick'], client.swarm.attrs['Spec']['Raft']['HeartbeatTick'])
+        self.assertEqual(update_dict['election_tick'], client.swarm.attrs['Spec']['Raft']['ElectionTick'])
+        self.assertEqual(update_dict['dispatcher_heartbeat_period'], client.swarm.attrs['Spec']['Dispatcher']['HeartbeatPeriod'])
+        self.assertEqual(update_dict['node_cert_expiry'], client.swarm.attrs['Spec']['CAConfig']['NodeCertExpiry'])
+        self.assertEqual(update_dict['external_ca'], client.swarm.attrs['Spec']['CAConfig']['ExternalCAs'])
+        self.assertEqual(update_dict['name'], client.swarm.attrs['Spec']['Name'])
+        self.assertEqual(update_dict['labels'], client.swarm.attrs['Spec']['Labels'])
+        self.assertEqual(update_dict['signing_ca_cert'], client.swarm.attrs['Spec']['CAConfig']['SigningCACert'])
+        self.assertEqual(update_dict['signing_ca_key'], client.swarm.attrs['Spec']['CAConfig']['SigningCAKey'])
+        # ca_force_rotate - Not sure what this maps too
+        # self.assertEqual(update_dict['ca_force_rotate'], client.swarm.attrs['Spec']['CAConfig']['ForceRotate'])
+        self.assertEqual(update_dict['autolock_managers'], client.swarm.attrs['Spec']['EncryptionConfig']['AutoLockManagers'])
+        self.assertEqual(update_dict['log_driver'], client.swarm.attrs['Spec']['TaskDefaults']['LogDriver'])
+
+
+    def test_update_token_rotation(self):
+        """
+        Test that update function rotates tokens
+        """
+        update_dict = {
+            "rotate_worker_token": True,
+            "rotate_manager_token": True,
+            "rotate_manager_unlock_key": True,
+        }
+
+         # Find a swarm that is in a success state
+        success_swarm = None
+        validate_swarm = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'success':
+                success_swarm = swarm
+                validate_swarm = copy.deepcopy(swarm)
+                break
+        if not success_swarm:
+            raise Exception("No swarm in success state found")
+
+        # Find a node in the swarm
+        swarm_id = success_swarm['id']
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == swarm_id:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No node in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        client.swarm.update(**update_dict)
+
+        self.assertNotEqual(client.swarm.attrs['JoinTokens']['Worker'], validate_swarm['attrs']['JoinTokens']['Worker'])
+        self.assertNotEqual(client.swarm.attrs['JoinTokens']['Manager'], validate_swarm['attrs']['JoinTokens']['Manager'])
+        self.assertNotEqual(client.swarm.get_unlock_key()['UnlockKey'], validate_swarm['UnlockKey'])
+        self.assertEqual(client.swarm.attrs['JoinTokens'], client.swarm._client_dict_entry()['attrs']['JoinTokens'])
+        self.assertEqual(client.swarm.get_unlock_key()['UnlockKey'], client.swarm._client_dict_entry()['UnlockKey'])
