@@ -640,8 +640,7 @@ class TestSwarmClass(unittest.TestCase):
         self.assertEqual(update_dict['labels'], client.swarm.attrs['Spec']['Labels'])
         self.assertEqual(update_dict['signing_ca_cert'], client.swarm.attrs['Spec']['CAConfig']['SigningCACert'])
         self.assertEqual(update_dict['signing_ca_key'], client.swarm.attrs['Spec']['CAConfig']['SigningCAKey'])
-        # ca_force_rotate - Not sure what this maps too
-        # self.assertEqual(update_dict['ca_force_rotate'], client.swarm.attrs['Spec']['CAConfig']['ForceRotate'])
+        self.assertEqual(update_dict['ca_force_rotate'], client.swarm.attrs['Spec']['CAConfig']['ForceRotate'])
         self.assertEqual(update_dict['autolock_managers'], client.swarm.attrs['Spec']['EncryptionConfig']['AutoLockManagers'])
         self.assertEqual(update_dict['log_driver'], client.swarm.attrs['Spec']['TaskDefaults']['LogDriver'])
 
@@ -687,3 +686,88 @@ class TestSwarmClass(unittest.TestCase):
         self.assertNotEqual(client.swarm.get_unlock_key()['UnlockKey'], validate_swarm['UnlockKey'])
         self.assertEqual(client.swarm.attrs['JoinTokens'], client.swarm._client_dict_entry()['attrs']['JoinTokens'])
         self.assertEqual(client.swarm.get_unlock_key()['UnlockKey'], client.swarm._client_dict_entry()['UnlockKey'])
+
+    def test_init_swarm_node_in_swarm(self):
+        """
+        Test 
+        """
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is not None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No node in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        with self.assertRaises(APIError):
+            client.swarm.init()
+
+    def test_init_swarm(self):
+        """
+        Test that Swarm.init() will create a swarm and add the node to the swarm
+        """
+        init_dict = {
+            "default_addr_pool": ['1.1.1.1', '1.1.1.2'],
+            "subnet_size": 18,
+            "data_path_addr": 1000,
+            "task_history_retention_limit": 420,
+            "snapshot_interval": 69,
+            "keep_old_snapshots": 3,
+            "log_entries_for_slow_followers": 1,
+            "heartbeat_tick": 23,
+            "election_tick": 22,
+            "dispatcher_heartbeat_period": 50,
+            "node_cert_expiry": 77777,
+            "external_ca": {},
+            "name": "this_has_been_updated",
+            "labels": {
+                "test_label": "Test Label"
+            },
+            "signing_ca_cert": "abc123",
+            "signing_ca_key": "123abc",
+            "ca_force_rotate": 123,
+            "autolock_managers": False,
+            "log_driver": {
+                "test": "test"
+            },
+        }
+
+        # Find a node not in a swarm
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] is None:
+                node_dict = node
+                break
+        if not node_dict:
+            raise Exception("No node not in swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        new_swarm = client.swarm.init(**init_dict)
+
+        self.assertIsNotNone(new_swarm)
+        self.assertEqual(client.swarm._swarm_id, new_swarm)
+        self.assertEqual(init_dict['default_addr_pool'], client.swarm.attrs['DefaultAddrPool'])
+        self.assertEqual(init_dict['subnet_size'], client.swarm.attrs['SubnetSize'])
+        # data_path_addr - Not Sure of Mapping
+        # self.assertEqual(init_dict['data_path_addr'], client.swarm.attrs['DataPathAddr'])
+        self.assertEqual(init_dict['task_history_retention_limit'], client.swarm.attrs['Spec']['Orchestration']['TaskHistoryRetentionLimit'])
+        self.assertEqual(init_dict['snapshot_interval'], client.swarm.attrs['Spec']['Raft']['SnapshotInterval'])
+        self.assertEqual(init_dict['keep_old_snapshots'], client.swarm.attrs['Spec']['Raft']['KeepOldSnapshots'])
+        self.assertEqual(init_dict['log_entries_for_slow_followers'], client.swarm.attrs['Spec']['Raft']['LogEntriesForSlowFollowers'])
+        self.assertEqual(init_dict['heartbeat_tick'], client.swarm.attrs['Spec']['Raft']['HeartbeatTick'])
+        self.assertEqual(init_dict['election_tick'], client.swarm.attrs['Spec']['Raft']['ElectionTick'])
+        self.assertEqual(init_dict['dispatcher_heartbeat_period'], client.swarm.attrs['Spec']['Dispatcher']['HeartbeatPeriod'])
+        self.assertEqual(init_dict['node_cert_expiry'], client.swarm.attrs['Spec']['CAConfig']['NodeCertExpiry'])
+        self.assertEqual(init_dict['external_ca'], client.swarm.attrs['Spec']['CAConfig']['ExternalCAs'])
+        self.assertEqual(init_dict['name'], client.swarm.attrs['Spec']['Name'])
+        self.assertEqual(init_dict['labels'], client.swarm.attrs['Spec']['Labels'])
+        self.assertEqual(init_dict['signing_ca_cert'], client.swarm.attrs['Spec']['CAConfig']['SigningCACert'])
+        self.assertEqual(init_dict['signing_ca_key'], client.swarm.attrs['Spec']['CAConfig']['SigningCAKey'])
+        self.assertEqual(init_dict['ca_force_rotate'], client.swarm.attrs['Spec']['CAConfig']['ForceRotate'])
+        self.assertEqual(init_dict['autolock_managers'], client.swarm.attrs['Spec']['EncryptionConfig']['AutoLockManagers'])
+        self.assertEqual(init_dict['log_driver'], client.swarm.attrs['Spec']['TaskDefaults']['LogDriver'])
