@@ -149,6 +149,9 @@ class MockDocker:
             return key_dict
 
         def init(self, **kwargs):
+            """
+            Initializes a new swarm from a node not a part of a swarm
+            """
             advertise_addr = kwargs.get('advertise_addr', None)
             listen_addr = kwargs.get('listen_addr', '0.0.0.0:2377')
             force_new_cluster = kwargs.get('force_new_cluster', False)
@@ -172,10 +175,82 @@ class MockDocker:
             autolock_managers = kwargs.get('autolock_managers', False)
             log_driver = kwargs.get('log_driver')
 
-            # Need to do some validation and add a new server to                               
+            if self._swarm_id is not None:
+                raise docker.errors.APIError("This node is already part of a swarm")            
+
+            self._swarm_id = self._generate_token(16)
+            self._unlock_key = self._generate_token(64)
+            
+            self.state = "success"
+            self.mock_docker._active_server['swarm'] = self._swarm_id
+
+            attrs_dict = {
+                "ID": "swarm_2",
+                "Version": {
+                    "Index": 373532
+                },
+                "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+                "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+                "Spec": {
+                    "Name": name,
+                    "Labels": labels,
+                    "Orchestration": {
+                        "TaskHistoryRetentionLimit": task_history_retention_limit
+                    },
+                    "Raft": {
+                        "SnapshotInterval": snapshot_interval,
+                        "KeepOldSnapshots": keep_old_snapshots,
+                        "LogEntriesForSlowFollowers": log_entries_for_slow_followers,
+                        "ElectionTick": election_tick,
+                        "HeartbeatTick": heartbeat_tick
+                    },
+                    "Dispatcher": {
+                        "HeartbeatPeriod": dispatcher_heartbeat_period
+                    },
+                    "CAConfig": {
+                        "NodeCertExpiry": node_cert_expiry,
+                        "ExternalCAs": external_ca,
+                        "SigningCACert": signing_ca_cert,
+                        "SigningCAKey": signing_ca_key,
+                        "ForceRotate": ca_force_rotate
+                    },
+                    "EncryptionConfig": {
+                        "AutoLockManagers": autolock_managers
+                    },
+                    "TaskDefaults": {
+                        "LogDriver": log_driver
+                    }
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                },
+                "RootRotationInProgress": False,
+                "DataPathPort": 4789,
+                "DefaultAddrPool": default_addr_pool,
+                "SubnetSize": subnet_size,
+                "JoinTokens": {
+                    "Worker": self._generate_token(32),
+                    "Manager": self._generate_token(32)
+                }
+            }
+
+            swarm_dict = {
+                "id": self._swarm_id,
+                "state": self.state,
+                "UnlockKey": self._unlock_key,
+                "attrs": attrs_dict
+            }
+            self.attrs = attrs_dict
+            self.mock_docker._client_dict['swarms'].append(swarm_dict)
+            return self._swarm_id
 
 
         def join(self, **kwargs):
+            """
+            Allows node not in a swarm to join an existing swarm
+            """
             remote_addrs = kwargs.get('remote_addrs')
             join_token = kwargs.get('join_token')
             listen_addr = kwargs.get('listen_addr', '0.0.0.0:2377')
@@ -224,7 +299,9 @@ class MockDocker:
             pass
 
         def update(self, **kwargs):
-
+            """
+            Update Swarm Configurations
+            """
             default_addr_pool = kwargs.get('default_addr_pool', None)
             subnet_size = kwargs.get('subnet_size', None)
             data_path_addr = kwargs.get('data_path_addr')
@@ -314,4 +391,4 @@ class MockDocker:
             for swarm in self.mock_docker._client_dict['swarms']:
                 if swarm['id'] == self._swarm_id:
                     return swarm
-
+            return None
