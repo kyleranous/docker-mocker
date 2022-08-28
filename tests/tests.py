@@ -3,7 +3,7 @@ import os
 import json
 import copy
 
-from docker.errors import APIError
+from docker.errors import APIError, InvalidArgument
 
 from mock_docker import MockDocker
 
@@ -771,3 +771,150 @@ class TestSwarmClass(unittest.TestCase):
         self.assertEqual(init_dict['ca_force_rotate'], client.swarm.attrs['Spec']['CAConfig']['ForceRotate'])
         self.assertEqual(init_dict['autolock_managers'], client.swarm.attrs['Spec']['EncryptionConfig']['AutoLockManagers'])
         self.assertEqual(init_dict['log_driver'], client.swarm.attrs['Spec']['TaskDefaults']['LogDriver'])
+
+    def test_unlock_swarm_wrong_key(self):
+        """
+        Test that Swarm.unlock() raises expected error when provided with wrong key
+        first test: key is not a string
+        second test: key is incorrect
+        """
+
+        # Find a swarm that is locked
+        swarm_dict = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'locked':
+                swarm_dict = swarm
+                break
+        else:
+            raise Exception("No locked swarm found")
+
+        # Find a node in the locked swarm
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == swarm_dict['id']:
+                node_dict = node
+                break
+        else:
+            raise Exception("No node in locked swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        with self.assertRaises(InvalidArgument):
+            client.swarm.unlock(123)
+
+        with self.assertRaises(APIError):
+            client.swarm.unlock("this_is_not_the_key")
+
+    def test_unlock_swarm(self):
+        """
+        Test that Swarm.unlock() will change the state of the swarm from "locked" to "success"
+        """
+        
+        # Find a swarm that is locked
+        swarm_dict = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'locked':
+                swarm_dict = swarm
+                break
+        else:
+            raise Exception("No locked swarm found")
+
+        # Find a node in the locked swarm
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == swarm_dict['id']:
+                node_dict = node
+                break
+        else:
+            raise Exception("No node in locked swarm found")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+        key = client.swarm.get_unlock_key()['UnlockKey']
+
+        self.assertTrue(client.swarm.unlock(key))
+        self.assertEquals(client.swarm._state, 'success')
+
+    def test_leave_when_manager(self):
+        """
+        Test that Swarm.leave() works when the node is manager
+        First test: force=False -> Raises APIError
+        Second test: force=True -> Returns True, leaves the Swarm
+        """
+        # Check for swarm in success state
+        swarm_dict = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'success':
+                swarm_dict = swarm
+                break
+        else:
+            raise Exception("No swarm in success state found")
+
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if (node['swarm'] == swarm_dict['id'] and 
+                node['attrs']['Spec']['Role'] == 'manager'):
+                node_dict = node
+                break
+        else:
+            raise Exception("No manager node found in swarm")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        with self.assertRaises(APIError):
+            client.swarm.leave()
+
+        self.assertTrue(client.swarm.leave(force=True))
+        self.assertIsNone(client.swarm._swarm_id)
+        self.assertIsNone(client._active_server['swarm'])
+        self.assertIsNone(client._active_server['attrs']['Spec']['Role'])
+
+    def test_leave_when_not_manager(self):
+        """
+        Test that Leave Node will succeed regardless of force when node is worker and member of a swarm
+        """
+        swarm_dict = None
+        for swarm in self.client_dict['swarms']:
+            if swarm['state'] == 'success':
+                swarm_dict = swarm
+                break
+        else:
+            raise Exception("No swarm in success state found")
+
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if (node['swarm'] == swarm_dict['id'] and 
+                node['attrs']['Spec']['Role'] == 'worker'):
+                node_dict = node
+                break
+        else:
+            raise Exception(f"No worker node found in swarm {swarm_dict['id']}")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        
+
+        self.assertTrue(client.swarm.leave())
+        self.assertIsNone(client.swarm._swarm_id)
+        self.assertIsNone(client._active_server['swarm'])
+        self.assertIsNone(client._active_server['attrs']['Spec']['Role'])
+
+    def test_leave_when_not_in_swarm(self):
+        """
+        Test that Swarm.leave() raises error when node is not part of a swarm
+        """
+        # Check for swarm in success state
+        node_dict = None
+        for node in self.client_dict['nodes']:
+            if node['swarm'] == None:
+                node_dict = node
+                break
+        else:
+            raise Exception("No manager node found not in swarm")
+
+        ip_address = node_dict['attrs']['Status']['Addr']
+        client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
+
+        with self.assertRaises(APIError):
+            client.swarm.leave()
