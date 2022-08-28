@@ -1,9 +1,81 @@
 {
     "swarms": [
         {
+            "id": "swarm_3",
+            "state": "locked",
+            "UnlockKey": "swarm_3_unlock_key",
+            "attrs": {
+                "ID": "swarm_3",
+                "Version": {
+                    "Index": 373532
+                },
+                "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+                "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+                "Spec": {
+                    "Name": "Swarm 3",
+                    "Labels": {},
+                    "Orchestration": {
+                    "TaskHistoryRetentionLimit": 10
+                    },
+                    "Raft": {
+                        "SnapshotInterval": 10000,
+                        "KeepOldSnapshots": 0,
+                        "LogEntriesForSlowFollowers": 500,
+                        "ElectionTick": 3,
+                        "HeartbeatTick": 1
+                    },
+                    "Dispatcher": {
+                        "HeartbeatPeriod": 5000000000
+                    },
+                    "CAConfig": {
+                        "NodeCertExpiry": 7776000000000000,
+                        "ExternalCAs": [
+                            {
+                                "Protocol": "",
+                                "URL": "",
+                                "Options": {
+                                    "property1": "",
+                                    "property2": ""
+                                },
+                                "CACert": "string"
+                            }
+                        ],
+                        "SigningCACert": "",
+                        "SigningCAKey": "",
+                        "ForceRotate": 0
+                    },
+                    "EncryptionConfig": {
+                        "AutoLockManagers": false
+                    },
+                    "TaskDefaults": {
+                        "LogDriver": {
+                            "Name": "json-file",
+                            "Options": {
+                                "max-file": "10",
+                                "max-size": "100m"
+                            }
+                        }
+                    }
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                },
+                "RootRotationInProgress": false,
+                "DataPathPort": 4789,
+                "DefaultAddrPool": [],
+                "SubnetSize": 24,
+                "JoinTokens": {
+                    "Worker": "swarm_3_worker_token",
+                    "Manager": "swarm_3_manager_token"
+                }
+            }
+        },
+        {
             "id": "swarm_2",
             "state": "success",
-            "UnlockKey": "swarm_1_unlock_key",
+            "UnlockKey": "swarm_2_unlock_key",
             "attrs": {
                 "ID": "swarm_2",
                 "Version": {
@@ -338,6 +410,106 @@
                     "State": "ready",
                     "Message": "",
                     "Addr": "172.17.0.4"
+                },
+                "ManagerStatus": {
+                    "Leader": true,
+                    "Reachability": "reachable",
+                    "Addr": "10.0.0.20:2377"
+                }
+            }
+        },
+        {
+            "swarm": "swarm_2",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_2_2",
+                "Version": {
+                    "Index": 373531
+                },
+                "CreatedAt": "",
+                "UpdatedAt": "",
+                "Spec": {
+                    "Availability": "active",
+                    "Name": "test-node-2-2",
+                    "Role": "worker",
+                    "Labels": {}
+                },
+                "Description": {
+                    "Hostname": "test-node-2-2",
+                    "Platform": {
+                        "Architecture": "x86_64",
+                        "OS": "linux"
+                    },
+                    "Resources": {
+                        "NanoCPUs": 4000000000,
+                        "MemoryBytes": 8272408576,
+                        "GenericResources": []
+                    },
+                    "Engine": {
+                        "EngineVersion": "17.06.0",
+                        "Labels": {},
+                        "Plugins": []
+                    },
+                    "TLSInfo": {
+                        "TrustRoot": "",
+                        "CertIssuerSubject": "",
+                        "CertIssuerPublicKey": ""
+                    }
+                },
+                "Status": {
+                    "State": "ready",
+                    "Message": "",
+                    "Addr": "172.17.0.7"
+                },
+                "ManagerStatus": {
+                    "Leader": false,
+                    "Reachability": "reachable",
+                    "Addr": "10.0.0.20:2377"
+                }
+            }
+        },
+        {
+            "swarm": "swarm_3",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_3_1",
+                "Version": {
+                    "Index": 373531
+                },
+                "CreatedAt": "",
+                "UpdatedAt": "",
+                "Spec": {
+                    "Availability": "active",
+                    "Name": "test-node-3-1",
+                    "Role": "manager",
+                    "Labels": {}
+                },
+                "Description": {
+                    "Hostname": "test-node-3-1",
+                    "Platform": {
+                        "Architecture": "x86_64",
+                        "OS": "linux"
+                    },
+                    "Resources": {
+                        "NanoCPUs": 4000000000,
+                        "MemoryBytes": 8272408576,
+                        "GenericResources": []
+                    },
+                    "Engine": {
+                        "EngineVersion": "17.06.0",
+                        "Labels": {},
+                        "Plugins": []
+                    },
+                    "TLSInfo": {
+                        "TrustRoot": "",
+                        "CertIssuerSubject": "",
+                        "CertIssuerPublicKey": ""
+                    }
+                },
+                "Status": {
+                    "State": "ready",
+                    "Message": "",
+                    "Addr": "172.17.0.5"
                 },
                 "ManagerStatus": {
                     "Leader": true,
