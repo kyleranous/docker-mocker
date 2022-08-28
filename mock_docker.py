@@ -293,10 +293,39 @@ class MockDocker:
             
 
         def leave(self, force=False):
-            pass
+            """
+            Request Node to leave the swarm, will fail if node is manager unless
+            force is set to true
+            """
+            if self.mock_docker._active_server['swarm'] is None:
+                raise docker.errors.APIError("Node is not part of a swarm")
+            
+            if self.mock_docker._active_server['attrs']['Spec']['Role'] == 'manager' and not force:
+                raise docker.errors.APIError("Node is a manager and force is not set")
 
-        def unlock(self):
-            pass
+            self.mock_docker._active_server['swarm'] = None
+            self.mock_docker._active_server['attrs']['Spec']['Role'] = None
+            self._swarm_id = None
+            self.attrs = None
+            self.version = None
+            self._state = None
+            self._unlock_key = None        
+            return True
+
+        def unlock(self, key):
+            """
+            Unlock Swarm if passed Key is valid
+            """
+            # Check that key is a string
+            if not isinstance(key, str):
+                raise docker.errors.InvalidArgument("key must be a string")
+
+            if key == self._unlock_key:
+                if self._state == "locked":
+                    self._state = "success"
+                    return True
+
+            raise docker.errors.APIError("Invalid unlock key")
 
         def update(self, **kwargs):
             """
@@ -330,7 +359,6 @@ class MockDocker:
             if self._state == 'fail':
                 raise docker.errors.APIError("Update Failed")
 
-            
             for swarm in self.mock_docker._client_dict['swarms']:
                 if swarm['id'] == self._swarm_id:
                     # Update attrs with new information
@@ -374,7 +402,6 @@ class MockDocker:
             # Reset state to fail if reload
             if self._state == 'reload':
                 self._state = 'fail'
-
             
         def reload(self):
             if self._state == 'fail':
