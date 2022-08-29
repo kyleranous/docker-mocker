@@ -47,7 +47,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in a swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -65,7 +65,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -83,7 +83,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -102,7 +102,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -120,7 +120,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -143,7 +143,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -167,7 +167,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -190,7 +190,7 @@ class TestnodesClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -226,7 +226,7 @@ class TestNodeClass(unittest.TestCase):
             if node['swarm'] is not None and node['state'] == 'success':
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found with success state")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -252,7 +252,7 @@ class TestNodeClass(unittest.TestCase):
             if node['swarm'] is not None and node['state'] == 'fail':
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found with fail state")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -278,7 +278,7 @@ class TestNodeClass(unittest.TestCase):
             if node['swarm'] is not None and node['state'] == 'fail':
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found with fail state")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -319,14 +319,14 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found")
         swarm_dict = None
         for swarm in self.client_dict['swarms']:
             if swarm['id'] == node_dict['swarm']:
                 swarm_dict = swarm
                 break
-        if not swarm_dict:
+        else:
             raise Exception("No Swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -344,14 +344,14 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found")
         swarm_dict = None
         for swarm in self.client_dict['swarms']:
             if swarm['id'] == node_dict['swarm']:
                 swarm_dict = swarm
                 break
-        if not swarm_dict:
+        else:
             raise Exception("No Swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -369,7 +369,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes in swarm found")
         
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -387,7 +387,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -406,7 +406,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
         swarm_node = None
@@ -414,7 +414,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is not None:
                 swarm_node = node
                 break
-        if not swarm_node:
+        else:
             raise Exception("No Nodes in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -433,7 +433,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
 
@@ -453,7 +453,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
         swarm_node = None
@@ -461,7 +461,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is not None:
                 swarm_node = node
                 break
-        if not swarm_node:
+        else:
             raise Exception("No Nodes in swarm found")
 
         # Get the swarm token
@@ -485,7 +485,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No Nodes not in swarm found")
 
         swarm_node = None
@@ -493,7 +493,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is not None:
                 swarm_node = node
                 break
-        if not swarm_node:
+        else:
             raise Exception("No Nodes in swarm found")
 
         # Get the swarm token
@@ -518,7 +518,7 @@ class TestSwarmClass(unittest.TestCase):
             if swarm['state'] == 'fail':
                 fail_swarm = swarm
                 break
-        if not fail_swarm:
+        else:
             raise Exception("No swarm in fail state found")
 
         # Find a node in the swarm
@@ -527,8 +527,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] == swarm_id:
                 node_dict = node
                 break
-        
-        if not node_dict:
+        else:
             raise Exception("No node in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -547,7 +546,7 @@ class TestSwarmClass(unittest.TestCase):
             if swarm['state'] == 'fail':
                 fail_swarm = swarm
                 break
-        if not fail_swarm:
+        else:
             raise Exception("No swarm in fail state found")
 
         # Find a node in the swarm
@@ -556,8 +555,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] == swarm_id:
                 node_dict = node
                 break
-        
-        if not node_dict:
+        else:
             raise Exception("No node in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -605,7 +603,7 @@ class TestSwarmClass(unittest.TestCase):
             if swarm['state'] == 'success':
                 success_swarm = swarm
                 break
-        if not success_swarm:
+        else:
             raise Exception("No swarm in success state found")
 
         # Find a node in the swarm
@@ -615,7 +613,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] == swarm_id:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No node in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -663,7 +661,7 @@ class TestSwarmClass(unittest.TestCase):
                 success_swarm = swarm
                 validate_swarm = copy.deepcopy(swarm)
                 break
-        if not success_swarm:
+        else:
             raise Exception("No swarm in success state found")
 
         # Find a node in the swarm
@@ -673,7 +671,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] == swarm_id:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No node in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -696,7 +694,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is not None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No node in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
@@ -741,7 +739,7 @@ class TestSwarmClass(unittest.TestCase):
             if node['swarm'] is None:
                 node_dict = node
                 break
-        if not node_dict:
+        else:
             raise Exception("No node not in swarm found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
