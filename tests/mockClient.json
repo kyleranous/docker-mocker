@@ -1,22 +1,243 @@
 {
+    "swarms": [
+        {
+            "id": "swarm_3",
+            "state": "locked",
+            "UnlockKey": "swarm_3_unlock_key",
+            "attrs": {
+                "ID": "swarm_3",
+                "Version": {
+                    "Index": 373532
+                },
+                "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+                "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+                "Spec": {
+                    "Name": "Swarm 3",
+                    "Labels": {},
+                    "Orchestration": {
+                    "TaskHistoryRetentionLimit": 10
+                    },
+                    "Raft": {
+                        "SnapshotInterval": 10000,
+                        "KeepOldSnapshots": 0,
+                        "LogEntriesForSlowFollowers": 500,
+                        "ElectionTick": 3,
+                        "HeartbeatTick": 1
+                    },
+                    "Dispatcher": {
+                        "HeartbeatPeriod": 5000000000
+                    },
+                    "CAConfig": {
+                        "NodeCertExpiry": 7776000000000000,
+                        "ExternalCAs": [
+                            {
+                                "Protocol": "",
+                                "URL": "",
+                                "Options": {
+                                    "property1": "",
+                                    "property2": ""
+                                },
+                                "CACert": "string"
+                            }
+                        ],
+                        "SigningCACert": "",
+                        "SigningCAKey": "",
+                        "ForceRotate": 0
+                    },
+                    "EncryptionConfig": {
+                        "AutoLockManagers": false
+                    },
+                    "TaskDefaults": {
+                        "LogDriver": {
+                            "Name": "json-file",
+                            "Options": {
+                                "max-file": "10",
+                                "max-size": "100m"
+                            }
+                        }
+                    }
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                },
+                "RootRotationInProgress": false,
+                "DataPathPort": 4789,
+                "DefaultAddrPool": [],
+                "SubnetSize": 24,
+                "JoinTokens": {
+                    "Worker": "swarm_3_worker_token",
+                    "Manager": "swarm_3_manager_token"
+                }
+            }
+        },
+        {
+            "id": "swarm_2",
+            "state": "success",
+            "UnlockKey": "swarm_2_unlock_key",
+            "attrs": {
+                "ID": "swarm_2",
+                "Version": {
+                    "Index": 373532
+                },
+                "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+                "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+                "Spec": {
+                    "Name": "Swarm 2",
+                    "Labels": {},
+                    "Orchestration": {
+                    "TaskHistoryRetentionLimit": 10
+                    },
+                    "Raft": {
+                        "SnapshotInterval": 10000,
+                        "KeepOldSnapshots": 0,
+                        "LogEntriesForSlowFollowers": 500,
+                        "ElectionTick": 3,
+                        "HeartbeatTick": 1
+                    },
+                    "Dispatcher": {
+                        "HeartbeatPeriod": 5000000000
+                    },
+                    "CAConfig": {
+                        "NodeCertExpiry": 7776000000000000,
+                        "ExternalCAs": [
+                            {
+                                "Protocol": "",
+                                "URL": "",
+                                "Options": {
+                                    "property1": "",
+                                    "property2": ""
+                                },
+                                "CACert": "string"
+                            }
+                        ],
+                        "SigningCACert": "",
+                        "SigningCAKey": "",
+                        "ForceRotate": 0
+                    },
+                    "EncryptionConfig": {
+                        "AutoLockManagers": false
+                    },
+                    "TaskDefaults": {
+                        "LogDriver": {
+                            "Name": "json-file",
+                            "Options": {
+                                "max-file": "10",
+                                "max-size": "100m"
+                            }
+                        }
+                    }
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                },
+                "RootRotationInProgress": false,
+                "DataPathPort": 4789,
+                "DefaultAddrPool": [],
+                "SubnetSize": 24,
+                "JoinTokens": {
+                    "Worker": "swarm_2_worker_token",
+                    "Manager": "swarm_2_manager_token"
+                }
+            }
+        },
+        {
+            "id": "swarm_1",
+            "state": "fail",
+            "UnlockKey": "swarm_1_unlock_key",
+            "attrs": {
+                "ID": "swarm_1",
+                "Version": {
+                    "Index": 373531
+                },
+                "CreatedAt": "2016-08-18T10:44:24.496525531Z",
+                "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
+                "Spec": {
+                    "Name": "Swarm 1",
+                    "Labels": {},
+                    "Orchestration": {
+                    "TaskHistoryRetentionLimit": 10
+                    },
+                    "Raft": {
+                        "SnapshotInterval": 10000,
+                        "KeepOldSnapshots": 0,
+                        "LogEntriesForSlowFollowers": 500,
+                        "ElectionTick": 3,
+                        "HeartbeatTick": 1
+                    },
+                    "Dispatcher": {
+                        "HeartbeatPeriod": 5000000000
+                    },
+                    "CAConfig": {
+                        "NodeCertExpiry": 7776000000000000,
+                        "ExternalCAs": [
+                            {
+                                "Protocol": "",
+                                "URL": "",
+                                "Options": {
+                                    "property1": "",
+                                    "property2": ""
+                                },
+                                "CACert": "string"
+                            }
+                        ],
+                        "SigningCACert": "",
+                        "SigningCAKey": "",
+                        "ForceRotate": 0
+                    },
+                    "EncryptionConfig": {
+                        "AutoLockManagers": false
+                    },
+                    "TaskDefaults": {
+                        "LogDriver": {
+                            "Name": "json-file",
+                            "Options": {
+                                "max-file": "10",
+                                "max-size": "100m"
+                            }
+                        }
+                    }
+                },
+                "TLSInfo": {
+                    "TrustRoot": "",
+                    "CertIssuerSubject": "",
+                    "CertIssuerPublicKey": ""
+                },
+                "RootRotationInProgress": false,
+                "DataPathPort": 4789,
+                "DefaultAddrPool": [],
+                "SubnetSize": 24,
+                "JoinTokens": {
+                    "Worker": "swarm_1_worker_token",
+                    "Manager": "swarm_1_manager_token"
+                }
+            }
+        }
+    ],
     "nodes": [
         {
-            "ID": "man_fail_node",
+            "swarm": null,
+            "state": "success",
+            "attrs": {
+                "ID": "no_swarm_node",
                 "Version": {
-                    "Index": ""
+                    "Index": 373531
                 },
                 "CreatedAt": "",
                 "UpdatedAt": "",
                 "Spec": {
-                    "Availability": "available",
-                    "Name": "ManNode1",
+                    "Availability": "active",
+                    "Name": "no-swarm-node",
                     "Role": "manager",
                     "Labels": {}
                 },
                 "Description": {
-                    "Hostname": "man-node-1",
+                    "Hostname": "no-swarm-node",
                     "Platform": {
-                        "Architecture": "amd64",
+                        "Architecture": "x86_64",
                         "OS": "linux"
                     },
                     "Resources": {
@@ -41,28 +262,32 @@
                     "Addr": "172.17.0.1"
                 },
                 "ManagerStatus": {
-                    "Leader": false,
+                    "Leader": true,
                     "Reachability": "reachable",
-                    "Addr": "10.0.0.41:2337"
+                    "Addr": "10.0.0.20:2377"
                 }
+            }
         },
         {
-            "ID": "man_succeed_node",
+            "swarm": "swarm_1",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_1_1",
                 "Version": {
-                    "Index": ""
+                    "Index": 373531
                 },
                 "CreatedAt": "",
                 "UpdatedAt": "",
                 "Spec": {
-                    "Availability": "available",
-                    "Name": "ManNode2",
+                    "Availability": "active",
+                    "Name": "test-node-1-1",
                     "Role": "manager",
                     "Labels": {}
                 },
                 "Description": {
-                    "Hostname": "man-node-2",
+                    "Hostname": "test-node-1-1",
                     "Platform": {
-                        "Architecture": "amd64",
+                        "Architecture": "x86_64",
                         "OS": "linux"
                     },
                     "Resources": {
@@ -89,26 +314,30 @@
                 "ManagerStatus": {
                     "Leader": true,
                     "Reachability": "reachable",
-                    "Addr": "10.0.0.42:2337"
+                    "Addr": "10.0.0.20:2377"
                 }
+            }
         },
         {
-            "ID": "work_fail_node",
+            "swarm": "swarm_1",
+            "state": "fail",
+            "attrs": {
+                "ID": "test_node_1_2",
                 "Version": {
-                    "Index": ""
+                    "Index": 373531
                 },
                 "CreatedAt": "",
                 "UpdatedAt": "",
                 "Spec": {
-                    "Availability": "available",
-                    "Name": "WorkNode1",
+                    "Availability": "active",
+                    "Name": "test-node-1-2",
                     "Role": "worker",
                     "Labels": {}
                 },
                 "Description": {
-                    "Hostname": "work-node-1",
+                    "Hostname": "test-node-1-2",
                     "Platform": {
-                        "Architecture": "amd64",
+                        "Architecture": "x86_64",
                         "OS": "linux"
                     },
                     "Resources": {
@@ -133,28 +362,32 @@
                     "Addr": "172.17.0.3"
                 },
                 "ManagerStatus": {
-                    "Leader": false,
+                    "Leader": true,
                     "Reachability": "reachable",
-                    "Addr": "10.0.0.43:2337"
+                    "Addr": "10.0.0.20:2377"
                 }
+            }
         },
         {
-            "ID": "work_succeed_node",
+            "swarm": "swarm_2",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_2_1",
                 "Version": {
-                    "Index": ""
+                    "Index": 373531
                 },
                 "CreatedAt": "",
                 "UpdatedAt": "",
                 "Spec": {
-                    "Availability": "available",
-                    "Name": "WorkNode2",
-                    "Role": "worker",
+                    "Availability": "active",
+                    "Name": "test-node-2-1",
+                    "Role": "manager",
                     "Labels": {}
                 },
                 "Description": {
-                    "Hostname": "work-node-2",
+                    "Hostname": "test-node-2-1",
                     "Platform": {
-                        "Architecture": "amd64",
+                        "Architecture": "x86_64",
                         "OS": "linux"
                     },
                     "Resources": {
@@ -179,134 +412,110 @@
                     "Addr": "172.17.0.4"
                 },
                 "ManagerStatus": {
+                    "Leader": true,
+                    "Reachability": "reachable",
+                    "Addr": "10.0.0.20:2377"
+                }
+            }
+        },
+        {
+            "swarm": "swarm_2",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_2_2",
+                "Version": {
+                    "Index": 373531
+                },
+                "CreatedAt": "",
+                "UpdatedAt": "",
+                "Spec": {
+                    "Availability": "active",
+                    "Name": "test-node-2-2",
+                    "Role": "worker",
+                    "Labels": {}
+                },
+                "Description": {
+                    "Hostname": "test-node-2-2",
+                    "Platform": {
+                        "Architecture": "x86_64",
+                        "OS": "linux"
+                    },
+                    "Resources": {
+                        "NanoCPUs": 4000000000,
+                        "MemoryBytes": 8272408576,
+                        "GenericResources": []
+                    },
+                    "Engine": {
+                        "EngineVersion": "17.06.0",
+                        "Labels": {},
+                        "Plugins": []
+                    },
+                    "TLSInfo": {
+                        "TrustRoot": "",
+                        "CertIssuerSubject": "",
+                        "CertIssuerPublicKey": ""
+                    }
+                },
+                "Status": {
+                    "State": "ready",
+                    "Message": "",
+                    "Addr": "172.17.0.7"
+                },
+                "ManagerStatus": {
                     "Leader": false,
                     "Reachability": "reachable",
-                    "Addr": "10.0.0.44:2337"
+                    "Addr": "10.0.0.20:2377"
                 }
-        },
-        {
-            "ID": "man_fail_noreload",
-            "Version": {
-                "Index": ""
-            },
-            "CreatedAt": "",
-            "UpdatedAt": "",
-            "Spec": {
-                "Availability": "available",
-                "Name": "ManNode3",
-                "Role": "manager",
-                "Labels": {}
-            },
-            "Description": {
-                "Hostname": "man-node-3",
-                "Platform": {
-                    "Architecture": "amd64",
-                    "OS": "linux"
-                },
-                "Resources": {
-                    "NanoCPUs": 4000000000,
-                    "MemoryBytes": 8272408576,
-                    "GenericResources": []
-                },
-                "Engine": {
-                    "EngineVersion": "17.06.0",
-                    "Labels": {},
-                    "Plugins": []
-                },
-                "TLSInfo": {
-                    "TrustRoot": "",
-                    "CertIssuerSubject": "",
-                    "CertIssuerPublicKey": ""
-                }
-            },
-            "Status": {
-                "State": "ready",
-                "Message": "",
-                "Addr": "172.17.0.5"
-            },
-            "ManagerStatus": {
-                "Leader": false,
-                "Reachability": "reachable",
-                "Addr": "10.0.0.45:2337"
             }
         },
         {
-            "ID": "work_fail_noreload",
-            "Version": {
-                "Index": ""
-            },
-            "CreatedAt": "",
-            "UpdatedAt": "",
-            "Spec": {
-                "Availability": "available",
-                "Name": "WorkNode3",
-                "Role": "manager",
-                "Labels": {}
-            },
-            "Description": {
-                "Hostname": "work-node-3",
-                "Platform": {
-                    "Architecture": "amd64",
-                    "OS": "linux"
+            "swarm": "swarm_3",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_3_1",
+                "Version": {
+                    "Index": 373531
                 },
-                "Resources": {
-                    "NanoCPUs": 4000000000,
-                    "MemoryBytes": 8272408576,
-                    "GenericResources": []
+                "CreatedAt": "",
+                "UpdatedAt": "",
+                "Spec": {
+                    "Availability": "active",
+                    "Name": "test-node-3-1",
+                    "Role": "manager",
+                    "Labels": {}
                 },
-                "Engine": {
-                    "EngineVersion": "17.06.0",
-                    "Labels": {},
-                    "Plugins": []
+                "Description": {
+                    "Hostname": "test-node-3-1",
+                    "Platform": {
+                        "Architecture": "x86_64",
+                        "OS": "linux"
+                    },
+                    "Resources": {
+                        "NanoCPUs": 4000000000,
+                        "MemoryBytes": 8272408576,
+                        "GenericResources": []
+                    },
+                    "Engine": {
+                        "EngineVersion": "17.06.0",
+                        "Labels": {},
+                        "Plugins": []
+                    },
+                    "TLSInfo": {
+                        "TrustRoot": "",
+                        "CertIssuerSubject": "",
+                        "CertIssuerPublicKey": ""
+                    }
                 },
-                "TLSInfo": {
-                    "TrustRoot": "",
-                    "CertIssuerSubject": "",
-                    "CertIssuerPublicKey": ""
+                "Status": {
+                    "State": "ready",
+                    "Message": "",
+                    "Addr": "172.17.0.5"
+                },
+                "ManagerStatus": {
+                    "Leader": true,
+                    "Reachability": "reachable",
+                    "Addr": "10.0.0.20:2377"
                 }
-            },
-            "Status": {
-                "State": "ready",
-                "Message": "",
-                "Addr": "172.17.0.6"
-            },
-            "ManagerStatus": {
-                "Leader": false,
-                "Reachability": "reachable",
-                "Addr": "10.0.0.46:2337"
-            }
-        }
-    ],
-    "swarms": [
-        {
-            "ID": "test_swarm",
-            "Version": {
-                "Index": 373531
-            },
-            "CreatedAt": "2016-08-18T10:44:24.496525531Z",
-            "UpdatedAt": "2017-08-09T07:09:37.632105588Z",
-            "Spec": {
-                "Name": "Swarm_Name",
-                "Labels": {},
-                "Orchestration": {},
-                "Raft": {},
-                "Dispatcher": {},
-                "CAConfig": {},
-                "EncryptionConfig": {},
-                "TaskDefaults": {}
-            },
-            "TLSInfo": {
-                "TrustRoot": "",
-                "CertIssuerSubject": "",
-                "CertIssuerPublicKey": ""
-            },
-            "RootRotationInProgress": false,
-            "DataPathPort": 4789,
-            "DefaultAddrPool": [],
-            "SubnetSize": 24,
-            "JoinTokens": {
-                "Worker": "worker_join_token_001",
-                "Manager": "manager_join_token_001"
             }
         }
     ]

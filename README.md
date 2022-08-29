@@ -1,50 +1,58 @@
 # Docker Mocker
 
-
 ## Description
-Docker Mocker is python package that spoofs the docker SDK for unit testing. 
+Docker Mocker is python package that spoofs the docker SDK for unit testing. *Note, this project is not associate with Docker, Inc.*
 
 
 ## Installation
 Clone repository and copy into project
-Install docker package (if not already installed), MockClient() will pass the expected docker errors to test exception handling.
-Import MockClient into unit tests
+Install docker package (if not already installed), `MockDocker` will pass the expected docker errors to test exception handling.
+Import MockDocker into unit tests `from mock_docker import MockDocker`
 
+
+# Project Status
+<!---
+Emoji Codes for Project Status
+:red_circle: Not Started
+:large_orange_diamond: Development In-Progress
+:large_blue_diamond: Testing
+:heavy_check_mark: Complete
+--->
+| Module | Status |
+| :--- | :--- |
+| Client | :large_orange_diamond: Development In-Progress |
+| Configs | :red_circle: Not Started |
+| Containers | :red_circle: Not Started |
+| Images | :red_circle: Not Started |
+| Networks | :red_circle: Not Started |
+| Nodes | :large_blue_diamond: Testing |
+| Plugins | :red_circle: Not Started |
+| Secrets | :red_circle: Not Started |
+| Services | :red_circle: Not Started |
+| Swarm | :large_blue_diamond: Testing |
+| Volumes | :red_circle: Not Started |
 
 ## Usage
-
-### MockClient()
-Create a Json file that defines the needed docker classes (nodes, swarms, volumes, etc.), example JSON file `tests\mockClient.json`. In a unit test define a MockClient object and populate it from the JSON file 
-```
-test_client = MockClient().load_from_file('[path/to/json].json')
-```
-Write the unit tests passing the MockClient() object in place of the docker client object.
-
-### MockClient.nodes
-`MockClient.nodes` is an instance of `MockClient.TestNodes()` that is generated automatically when a `MockClient()` object is initialized. The `TestNodes()` subclass holds a list of `MockClient.Node()` objects, the `get()` and `list()` functions that are replicas of `docker.client.nodes.get()` and `docker.client.nodes.list()` functions, and a `add_node()` function that will add a `MockClient.Node()` object to the list. 
-
-### MockClient.Node
-`MockClient.Node` is an object that contains the rest of the `docker.client.nodes` functions. `MockClient.Node.attrs` is a dictionary object of the same format as `docker.client.nodes.attrs`. `MockClient.Node.update()` functions like `docker.client.nodes.update()`, however it will always succeed unless `fail` is in the Node ID, then it will raise a `docker.errors.APIError`. Calling `reload` on a node with `fail` in the Node ID, will change the `fail` to `reload`. If follow on testing is needed with that node before it get's recreated, the ID will need to be updated to replace `reload` with `fail`. However, ending a node_id with `no_reload` will force `reload()` to fail.
-
-```python
-# node.id = 'worker_fail_node'
-node.update(node_spec=new_attrs) # Raises APIError because 'fail' in node id
-node.reload() # Simulates reloading the version, replaces `fail` in the node id with `reload` node.id = 'worker_reload_node'
-node.update(node_spec=new_attrs) # Succeeds
-
-# Reset the node_id for follow on testing
-node.reset_id() # node.id = 'worker_fail_node'
-
-# node.id = 'worker_fail_noreload`
-node.update(node_spec=new_attrs) # Raises APIError because 'fail' in node id
-node.reload() # Makes no change because `noreload` in node id
-
-node.update(node_spec=new_attrs) # Still Raises APIError
-
-node.reset_id() # Does nothing because `noreload` in node id
-
-```
 
 
 
 ## How to Contribute
+
+### Bug Reports / Feature Requests / General Issues
+Anyone can submit a Bug Report or Feature Request. Please use the template when submitting
+- When submitting a Bug Report please include code snippet of what is failing, What expected behavior is, and what is happening. You may be asked for a copy of your client definition json to assist in troubleshooting.
+
+- When submitting a feature request provide details of the request, why the feature is being requested, and links to relelvent Docker (official) documentation. Please Note, database based branch is being left up for reference and is not being activly developed or maintained by me.
+
+### Submitting Code Changes
+If you want to submit a code change
+1. Fork the project
+1. Make your updates to the code
+1. Add Comprehensive Unit Tests and ensure **ALL** tests pass
+1. Add / Update all relevent documentation in the branch. PR will be denied if unit tests or documentation are missing. 
+1. Submit a PR with your changes to the `development` branch
+1. In the PR, provide a description of what was changed/added, why it was changed/added, and what tests were added. Link to relevent Issues. If any unit tests were edited or removed, provide an explenation.
+1. If PR is excepted, your username will be added to the contributers list with a link to your profile, unless you request otherwise. 
+
+## Contributers
+Just me for now
