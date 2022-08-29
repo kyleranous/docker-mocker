@@ -528,7 +528,7 @@ class TestSwarmClass(unittest.TestCase):
                 node_dict = node
                 break
         else:
-            raise Exception("No node in swarm found")
+            raise Exception(f"No node in swarm {swarm_id} found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
         client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
@@ -556,7 +556,7 @@ class TestSwarmClass(unittest.TestCase):
                 node_dict = node
                 break
         else:
-            raise Exception("No node in swarm found")
+            raise Exception(f"No node in swarm {swarm_id} found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
         client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
@@ -614,7 +614,7 @@ class TestSwarmClass(unittest.TestCase):
                 node_dict = node
                 break
         else:
-            raise Exception("No node in swarm found")
+            raise Exception(f"No node in swarm {swarm_id} found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
         client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
@@ -672,7 +672,7 @@ class TestSwarmClass(unittest.TestCase):
                 node_dict = node
                 break
         else:
-            raise Exception("No node in swarm found")
+            raise Exception(f"No node in swarm {swarm_id} found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
         client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
@@ -792,7 +792,7 @@ class TestSwarmClass(unittest.TestCase):
                 node_dict = node
                 break
         else:
-            raise Exception("No node in locked swarm found")
+            raise Exception(f"No node in locked swarm {swarm_dict['id']} found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
         client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
@@ -823,7 +823,7 @@ class TestSwarmClass(unittest.TestCase):
                 node_dict = node
                 break
         else:
-            raise Exception("No node in locked swarm found")
+            raise Exception(f"No node in locked swarm {swarm_dict['id']} found")
 
         ip_address = node_dict['attrs']['Status']['Addr']
         client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
@@ -854,7 +854,7 @@ class TestSwarmClass(unittest.TestCase):
                 node_dict = node
                 break
         else:
-            raise Exception("No manager node found in swarm")
+            raise Exception(f"No manager node found in swarm {swarm_dict['id']}")
 
         ip_address = node_dict['attrs']['Status']['Addr']
         client = self.mock_client.DockerClient(base_url=f"tcp://{ip_address}:2375")
