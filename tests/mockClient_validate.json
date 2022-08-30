@@ -1,0 +1,21 @@
+{
+    "swarms": [
+        {
+            "id": "test_swarm_1",
+            "state": "success",
+            "attrs": {
+                "ID": "test_swarm_1",
+                "Spec": {
+                    "Name": "Test Swarm 1"
+                },
+                "JoinTokens": {
+                    "Worker": "worker_join_token",
+                    "Manager": "manager_join_token"
+                }
+            }
+        },
+        {
+            "test": "test"
+        }
+    ]
+}
