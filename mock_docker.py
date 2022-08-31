@@ -5,16 +5,20 @@ mock_docker is a temporary db to mock the Docker API in unit tests.
 import docker
 import random
 import string
+import json
 
+from validate import validate_swarm_data
 
 class MockDocker:
 
     def __init__(self, client_dict={}):
         # Validate Swarms in client_dict
-
+        swarm_errors = validate_swarm_data(client_dict['swarms'])
+        if len(swarm_errors) > 0:
+            raise Exception(f'{json.dumps(swarm_errors, indent=4)}')
+            
         # Validate Nodes in client_dict
 
-        #
 
         self._active_server = None
         self._client_dict = client_dict
