@@ -1,0 +1,49 @@
+{
+    "swarms": [
+        {
+            "id": "test_swarm_1",
+            "state": "success",
+            "attrs": {
+                "ID": "test_swarm_1",
+                "Spec": {
+                    "Name": "Test Swarm 1"
+                },
+                "JoinTokens": {
+                    "Worker": "worker_join_token",
+                    "Manager": "manager_join_token"
+                }
+            }
+        },
+        {
+            "id": "test_swarm_2",
+            "state": "fail",
+            "attrs": {
+                "ID": "test_swarm_2",
+                "Spec": {
+                    "Name": "Test Swarm 2"
+                },
+                "JoinTokens": {
+                    "Worker": "worker_join_token",
+                    "Manager": "manager_join_token"
+                }
+            }
+        }
+    ],
+    "nodes": [
+        {
+            "swarm": "test_swarm_3",
+            "id": "test_node_1",
+            "state": "success",
+            "attrs": {
+                "ID": "test_node_1",
+                "Status": {
+                    "Addr": "1.2.3.4"
+                }
+            }
+        },
+        {
+            "id": "test_node_2",
+            "state": "fail"
+        }
+    ]
+}
