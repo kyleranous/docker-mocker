@@ -3,6 +3,7 @@ Validation functions to validate teh data used to create MockDocker instances
 """
 import json
 
+
 def validate_swarm_data(swarm_dict):
     """
     Loops through the swarm definitions and validates that data is present and correct
@@ -70,8 +71,54 @@ def validate_swarm_data(swarm_dict):
     
     return response
 
-def validate_node_data(node_dict):
-    return {}
+
+def validate_node_data(node_list, swarm_list=None):
+    """
+    Loops through the swarm definitions and validates that data is present and correct
+    """
+    response = {}
+    node_ips = {}
+
+    for idx, node in enumerate(node_list):
+        error_list = []
+        warning_list = []
+        # Check if node is assigned to an existing swarm
+        if node.get('swarm') is not None:
+            if swarm_list is not None:
+                for swarm in swarm_list:
+                    if node.get('swarm') == swarm.get('id'):
+                        break
+                else:
+                    warning_list.append({'swarm_warning': f"No swarm found with id {node.get('swarm')}"})
+        if node.get('state') is None:
+            error_list.append({'state_error': 'Node state is required'})
+        elif node.get('state') not in ['success', 'fail']:
+            error_list.append({'state_error': 'Node state must be success or fail'})
+        
+        attrs = node.get('attrs')
+        if not attrs:
+            error_list.append({'attrs_error': 'Node attrs is required'})
+        else:
+            if attrs.get('ID') is None:
+                error_list.append({'attrs_ID_error': 'Node attrs ID is required'})
+            
+            if attrs.get('ID') is not None and attrs.get('Status') is not None and attrs.get('Status').get('Addr') is not None:
+                if attrs['Status']['Addr'] in node_ips.keys():
+                    error_list.append({'IP_addr_error': f"Node Address must be unique, duplicate found at index: {node_ips[attrs['Status']['Addr']]} and {attrs['ID']}"})
+                else:
+                    node_ips[attrs['Status']['Addr']] = attrs.get('ID')
+            if attrs.get('Status') is None:
+                error_list.append({'attrs_Status_error': 'Node attrs Status is required'})
+            elif attrs.get('Status').get('Addr') is None:
+                error_list.append({'IP_addr_error': 'Node IP Address is required'})
+        # Check for Node id
+        response[node.get('id')] ={
+            "errors": error_list,
+            "warnings": warning_list
+        }
+
+    return response
+
 
 def __main__():
     """
@@ -110,20 +157,38 @@ def __main__():
     
     # Validate Node Entries
     if client_dict.get('nodes') is not None:
-        response = validate_node_data(client_dict['nodes'])
-        if len(response) > 0:
+        response = validate_node_data(client_dict['nodes'], client_dict.get('swarms'))
+        # Count the number of nodes with an error
+        failed_nodes = 0
+        warnings = 0
+        for key, value in response.items():
+            if len(value['errors']) > 0:
+                failed_nodes += 1
+            if len(value['warnings']) > 0:
+                warnings += len(value['warnings'])
+        if failed_nodes > 0:
             print('*'*10, 'Node Validation Failed', '*'*10)
-            print(f"{len(client_dict['nodes'])} Checked, {len(response)} Failed - {(len(response) / len(client_dict['nodes']))*100}%")
-            for key, swarm in response.items():
-                print(f"{key}:")
-                for error in swarm:
-                    for ekey, msg in error.items():
-                        print(f"\t{ekey}: {msg}")
-        else:
+            print(f"{len(client_dict['nodes'])} Checked, {failed_nodes} Failed - {(failed_nodes / len(client_dict['nodes']))*100}%\n")
+            for key, value in response.items():
+                if len(value['errors']) > 0:
+                    print(f"{key}:")
+                    for error in value['errors']:
+                        for ekey, msg in error.items():
+                            print(f"\t{ekey}: {msg}")
+                    print('\n')
+        else: 
             print('*'*10, 'Node Validation Successful', '*'*10)
-            print(f"{len(client_dict['nodes'])} Checked")
-    else:
-        print("No Nodes to Validate")
+            print(f"{len(client_dict['nodes'])} Checked\n")
+        if warnings > 0:
+            print('*'*10, 'Node Validation Warnings Found', '*'*10)
+            print(f"{len(client_dict['nodes'])} Checked, {warnings} Warnings")
+            for key, value in response.items():
+                if len(value['warnings']) > 0:
+                    print(f"{key}:")
+                    for warning in value['warnings']:
+                        for ekey, msg in warning.items():
+                            print(f"\t{ekey}: {msg}")
+                    print('\n')
         
 
 if __name__ == '__main__':
