@@ -5,7 +5,7 @@ import copy
 
 from docker.errors import APIError, InvalidArgument
 
-from mock_docker import MockDocker
+from ..mock_docker import MockDocker
 
 
 class TestMockClient(unittest.TestCase):

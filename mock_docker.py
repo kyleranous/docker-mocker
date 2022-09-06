@@ -7,7 +7,7 @@ import random
 import string
 import json
 
-from validate import validate_swarm_data
+from .validate import validate_swarm_data
 
 class MockDocker:
 
